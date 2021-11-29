@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Simple utility to colorize log of a selected tool
+
+# Colors
+BLACK=\\o033[30m
+RED=\\o033[31m
+GREEN=\\o033[32m
+YELLOW=\\o033[33m
+BLUE=\\o033[34m
+MAGENTA=\\o033[35m
+CYAN=\\o033[36m
+WHITE=\\o033[37m
+DEFAULT=\\o033[39m
+
+# Attributes
+BOLD_ON=\\o033[1m
+BOLD_OFF=\\o033[22m
+FAINT_ON=\\o033[2m
+FAINT_OFF=\\o033[22m
+INVERSE_ON=\\o033[7m
+INVERSE_OFF=\\o033[27m
+CLEAN_FORMAT=\\o033[0m
+
+# Tool select
+if [[ "$1" == "vcs" ]]
+then
+sed --unbuffered \
+    -e "s%\(^[ELWN]\S*-\[\S*\]\)\(\s.*\)%${INVERSE_ON}\1${INVERSE_OFF}${BOLD_ON}\2${BOLD_OFF}%" \
+    -e "s%\(^.*Lint-.*\)%${CYAN}\1${DEFAULT}%" \
+    -e "s%\(^.*Note-.*\)%${BLUE}\1${DEFAULT}%" \
+    -e "s%\(^.*Warning-.*\)%${YELLOW}\1${DEFAULT}%" \
+    -e "s%\(^.*Error-.*\)\(\s.*\)%${RED}\1${DEFAULT}%" \
+    -e "s%\(^/\S*,\s[0-9]*\)%${BOLD_ON}\1${CLEAN_FORMAT}%" \
+    -e "s%\('\S*'\)%${GREEN}\1${DEFAULT}%" \
+    -e "s%\(\"\S*\"\)%${MAGENTA}\1${DEFAULT}%"
+elif [[ "$1" == "uvm" ]]
+then
+sed --unbuffered \
+    -e "s%\(^[-*=]\{2,\}.*\)%${BOLD_ON}\1${BOLD_OFF}%" \
+    -e "s%\(^UVM_[IWEF]\S*\)\(\s\S*\s\|\s\)\(@\s[0-9]*:\)\(.*\)\(\[.*\]\)\(.*\)%${INVERSE_ON}\1${INVERSE_OFF}${FAINT_ON}\2${FAINT_OFF}${BOLD_ON}\3${BOLD_OFF}\4${BOLD_ON}\5${BOLD_OFF}\6%" \
+    -e "s%\(^.*UVM_INFO.*\)%${GREEN}\1${DEFAULT}%" \
+    -e "s%\(^.*UVM_WARNING.*\)%${YELLOW}\1${DEFAULT}%" \
+    -e "s%\(^.*UVM_ERROR.*\)%${RED}\1${DEFAULT}%" \
+    -e "s%\(^.*UVM_FATAL.*\)%${MAGENTA}\1${DEFAULT}%"
+else
+echo "log-colorize uvm|vcs"
+fi
