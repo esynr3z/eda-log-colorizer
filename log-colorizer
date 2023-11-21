@@ -43,6 +43,16 @@ sed --unbuffered \
     -e "s%\(^.*UVM_WARNING.*\)%${YELLOW}\1${DEFAULT}%" \
     -e "s%\(^.*UVM_ERROR.*\)%${RED}\1${DEFAULT}%" \
     -e "s%\(^.*UVM_FATAL.*\)%${MAGENTA}\1${DEFAULT}%"
+elif [[ "$1" == "vsim" ]]
+then
+sed --unbuffered \
+    -e "s%\(^.*INFO:.*\)%${GREEN}\1${DEFAULT}%" \
+    -e "s%\(^.*Warning:.*\)%${YELLOW}\1${DEFAULT}%" \
+    -e "s%\(^.*Error:.*\)\(\s.*\)%${RED}\1${DEFAULT}%"\
+    -e "s%\(^.*Error (suppressible):.*\)\(\s.*\)%${RED}\1${DEFAULT}%"\
+    -e "s%\(^.*ERROR:.*\)\(\s.*\)%${RED}\1${DEFAULT}%"\
+    -e "s%\(^.*Assertion error.*\)\(\s.*\)%${RED}\1${DEFAULT}%"\
+    -e "s%\(^.*Fatal:.*\)\(\s.*\)%${RED}\1${DEFAULT}%"
 else
-echo "log-colorize uvm|vcs"
+echo "log-colorize uvm|vcs|vsim"
 fi
