@@ -53,6 +53,26 @@ sed --unbuffered \
     -e "s%\(^.*ERROR:.*\)\(\s.*\)%${RED}\1${DEFAULT}%"\
     -e "s%\(^.*Assertion error.*\)\(\s.*\)%${RED}\1${DEFAULT}%"\
     -e "s%\(^.*Fatal:.*\)\(\s.*\)%${RED}\1${DEFAULT}%"
+elif [[ "$1" == "verilator" ]]
+then
+sed --unbuffered \
+    -e "s%\(^\%Warning-\S*:\)%${INVERSE_ON}\1${INVERSE_OFF}%" \
+    -e "s%\(^\%Error\(-\w*\)\?:\)%${INVERSE_ON}\1${INVERSE_OFF}%" \
+    -e "s%\(^.*\%Warning-.*\)%${YELLOW}\1${DEFAULT}%" \
+    -e "s%\(^.*\%Error.*\)%${RED}\1${DEFAULT}%" \
+    -e "s%\(^/\S*,\s[0-9]*\)%${BOLD_ON}\1${CLEAN_FORMAT}%" \
+    -e "s%\('\S*'\)%${GREEN}\1${DEFAULT}%" \
+    -e "s%\(\"\S*\"\)%${MAGENTA}\1${DEFAULT}%"
+elif [[ "$1" == "vivado" ]]
+then
+sed --unbuffered \
+    -e "s%\(^[EWC].*:\s*\[.*\]\)%${INVERSE_ON}\1${INVERSE_OFF}%" \
+    -e "s%\(^.*INFO:.*\)%${BLUE}\1${DEFAULT}%" \
+    -e "s%\(^.*WARNING:.*\)%${YELLOW}\1${DEFAULT}%" \
+    -e "s%\(^.*ERROR.*\)%${RED}\1${DEFAULT}%" \
+    -e "s%\(^/\S*,\s[0-9]*\)%${BOLD_ON}\1${CLEAN_FORMAT}%" \
+    -e "s%\('\S*'\)%${GREEN}\1${DEFAULT}%" \
+    -e "s%\(\"\S*\"\)%${MAGENTA}\1${DEFAULT}%"
 else
-echo "log-colorize uvm|vcs|vsim"
+echo "log-colorize uvm|vcs|vsim|verilator|vivado"
 fi
